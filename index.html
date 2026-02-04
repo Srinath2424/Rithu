@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Rithvika 🤍</title>
+
+<style>
+/* ---------- RESET & BASE ---------- */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background: radial-gradient(circle at top, #1a001a, #000);
+    font-family: 'Georgia', serif;
+    color:white;
+    overflow-x:hidden;
+    cursor: default;
+}
+
+/* ---------- SECTIONS ---------- */
+section{
+    min-height:100vh;
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:50px 20px;
+    position:relative;
+    z-index: 10;
+}
+
+h1{
+    font-size:3.8rem;
+    letter-spacing:4px;
+    margin-bottom:20px;
+}
+
+h2{
+    font-size:2.6rem;
+    margin-bottom:20px;
+}
+
+p{
+    font-size:1.35rem;
+    line-height:1.9;
+    max-width:900px;
+    margin:auto;
+}
+
+/* ---------- BUTTONS ---------- */
+button{
+    margin-top:20px;
+    margin-bottom: 20px;
+    padding:16px 50px;
+    font-size:1rem;
+    letter-spacing:3px;
+    border:2px solid #ffb3d9;
+    background:rgba(0,0,0,0.5);
+    color:#ffb3d9;
+    cursor:pointer;
+    transition:0.4s;
+    position: relative;
+    z-index: 20;
+}
+
+button:hover{
+    background:#ffb3d9;
+    color:black;
+    box-shadow:0 0 30px #ffb3d9;
+}
+
+/* Specific button styles for the favorites section */
+.btn-grid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+/* ---------- GLOW TEXT ---------- */
+.glow{
+    text-shadow:0 0 15px #ffb3d9, 0 0 35px #ff80bf;
+}
+
+/* ---------- EFFECTS LAYERS ---------- */
+/* 1. Background Hearts */
+.heart-bg{
+    position:fixed;
+    bottom:-30px;
+    font-size:22px;
+    animation:floatUp linear infinite;
+    opacity:0.8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* 2. Floating Images (Golden Retriever & Draco) */
+.float-img {
+    position: fixed;
+    bottom: -150px;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    animation: floatUpImage 6s linear forwards;
+    z-index: 50;
+    pointer-events: none;
+}
+
+.draco-glow {
+    box-shadow: 0 0 30px #2a623d; /* Slytherin Green */
+    border: 2px solid #2a623d;
+}
+
+@keyframes floatUpImage {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+}
+
+@keyframes floatUp{
+    from{transform:translateY(0); opacity:0;}
+    10%{opacity:0.9;}
+    to{transform:translateY(-120vh); opacity:0;}
+}
+
+/* 3. Chocolate Drip */
+#chocolate-overlay {
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://png.pngtree.com/png-clipart/20220131/original/pngtree-dripping-chocolate-melt-liquid-png-image_7248747.png') no-repeat top center;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 999;
+    transition: top 3s ease-in-out;
+}
+.chocolate-active {
+    top: 0 !important;
+}
+
+/* 4. Mouse Trail */
+.trail-heart {
+    position: fixed;
+    font-size: 20px;
+    pointer-events: none;
+    animation: fadeOut 1s forwards;
+    z-index: 100;
+}
+
+@keyframes fadeOut {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-40px) scale(0.5); opacity: 0; }
+}
+
+/* 5. Explosions */
+.burst{
+    position:absolute;
+    font-size:28px;
+    animation:burst 1.5s ease-out forwards;
+    pointer-events: none;
+    z-index: 99;
+}
+
+@keyframes burst{
+    from{transform:scale(0); opacity:1;}
+    to{transform:translate(var(--x), var(--y)) scale(1.5); opacity:0;}
+}
+
+/* ---------- NAME CANVAS ---------- */
+#canvas-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+canvas {
+    display: block;
+}
+
+/* ---------- HIDDEN MESSAGE ---------- */
+#hidden-trigger {
+    margin-top: 100px;
+    opacity: 0.1;
+    font-size: 2rem;
+    cursor: help;
+    transition: 0.5s;
+}
+#hidden-trigger:hover {
+    opacity: 1;
+    text-shadow: 0 0 20px red;
+}
+
+#secret-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.95);
+    z-index: 1000;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#secret-text {
+    font-size: 2rem;
+    color: #ffb3d9;
+    text-align: center;
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%{opacity:0.5;} 50%{opacity:1;} 100%{opacity:0.5;} }
+
+</style>
+</head>
+
+<body>
+
+<div id="chocolate-overlay"></div>
+
+<section>
+    <div>
+        <h1 class="glow">For Someone Special 🤍</h1>
+        <p>
+            This page was made slowly,<br>
+            with care,<br>
+            with love.
+        </p>
+        <button onclick="scrollToSection('name')">Begin</button>
+    </div>
+</section>
+
+<section id="name">
+    <div>
+        <div id="canvas-container">
+            <canvas id="textCanvas"></canvas>
+        </div>
+        <p>
+            Some names don’t just sound beautiful.<br>
+            They feel like home.
+        </p>
+        <button onclick="scrollToSection('favorites')">See What I Know</button>
+    </div>
+</section>
+
+<section id="favorites">
+    <div>
+        <h2 class="glow">Things You Love 🤍</h2>
+        <p>I remember the little things.</p>
+        
+        <div class="btn-grid">
+            <button onclick="spawnPuppies()">🐶 Puppies</button>
+            <button onclick="spawnDraco()">🐍 Draco</button>
+            <button onclick="meltChocolate()">🍫 Sweet</button>
+            <button onclick="massiveHeartStorm()">💖 LOTS of Love</button>
+        </div>
+        
+        <br><br>
+        <button onclick="scrollToSection('letter')">Read My Heart</button>
+    </div>
+</section>
+
+<section id="letter">
+    <div>
+        <h2>A Love Letter</h2>
+        <p id="type"></p>
+        <button onclick="scrollToSection('surprise')">One Surprise</button>
+    </div>
+</section>
+
+<section id="surprise">
+    <div>
+        <h2 class="glow">This Is The Part I Mean 🤍</h2>
+        <p>
+            I don’t promise perfection.<br>
+            I promise presence.<br><br>
+
+            I promise to choose you,<br>
+            even on quiet days,<br>
+            even on hard ones.
+        </p>
+        <button onclick="finalExplosion(event)">Forever</button>
+    </div>
+</section>
+
+<section>
+    <div>
+        <h2 class="glow">I Love You Forever and Ever 🤍</h2>
+        <p>
+            Not loudly.<br>
+            Not briefly.<br><br>
+
+            But deeply.<br>
+            Genuinely.<br>
+            Always.
+        </p>
+        
+        <div id="hidden-trigger" onclick="revealSecret()">...</div>
+    </div>
+</section>
+
+<div id="secret-modal" onclick="this.style.display='none'">
+    <div id="secret-text">
+        You found the secret spot.<br><br>
+        This is where I whisper:<br>
+        "You are the best thing that ever happened to me."<br><br>
+        (Click to close)
+    </div>
+</div>
+
+<audio autoplay loop>
+    <source src="https://cdn.pixabay.com/audio/2022/10/30/audio_7c29c93a5b.mp3">
+</audio>
+
+<script>
+/* ---------- TYPEWRITER ---------- */
+const text = `
+I don’t know when it happened,
+but loving you became natural.
+
+You make ordinary moments feel warm,
+and difficult days feel lighter.
+
+With you,
+I don’t want perfection.
+I want us.
+
+I Love You Forever and Ever.
+`;
+
+let i=0;
+function typeText(){
+    if(i<text.length){
+        document.getElementById("type").innerHTML+=text.charAt(i);
+        i++;
+        setTimeout(typeText,40);
+    }
+}
+typeText();
+
+/* ---------- SCROLL ---------- */
+function scrollToSection(id){
+    document.getElementById(id).scrollIntoView({behavior:'smooth'});
+}
+
+/* ---------- BACKGROUND RAIN ---------- */
+setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart-bg";
+    h.innerHTML="🤍";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=Math.random()*30+18+"px";
+    h.style.animationDuration=Math.random()*4+5+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),9000);
+},150);
+
+/* ---------- MOUSE TRAIL HEARTS ---------- */
+let lastMove = 0;
+document.addEventListener('mousemove', (e) => {
+    const now = Date.now();
+    if (now - lastMove > 50) {
+        let t = document.createElement("div");
+        t.className = "trail-heart";
+        t.innerHTML = "🤍";
+        t.style.left = (e.clientX - 10) + "px";
+        t.style.top = (e.clientY - 10) + "px";
+        document.body.appendChild(t);
+        
+        setTimeout(() => t.remove(), 1000);
+        lastMove = now;
+    }
+});
+
+/* ---------- CLICK EXPLOSION ---------- */
+document.addEventListener('click', (e) => {
+    if(e.target.tagName === 'BUTTON' || e.target.id === 'hidden-trigger') return;
+    createBurst(e.pageX, e.pageY);
+});
+
+function createBurst(x, y) {
+    const colors = ["#ffb3d9", "#ff80bf", "#ffffff", "#ff99cc"];
+    for(let i=0; i<20; i++){
+        let b = document.createElement("div");
+        b.className = "burst";
+        b.innerHTML = "🤍";
+        b.style.left = x + "px";
+        b.style.top = y + "px";
+        b.style.color = colors[Math.floor(Math.random()*colors.length)];
+        b.style.setProperty("--x", (Math.random()*300-150)+"px");
+        b.style.setProperty("--y", (Math.random()*300-150)+"px");
+        b.style.fontSize = Math.random()*20 + 10 + "px";
+        document.body.appendChild(b);
+        setTimeout(()=>b.remove(), 1500);
+    }
+}
+
+/* ---------- NEW EFFECTS LOGIC ---------- */
+
+// 1. PUPPIES
+const puppyImages = [
+    "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1591160690555-5debfba289f0?auto=format&fit=crop&w=300&q=80",
+    "https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=300&q=80"
+];
+
+function spawnPuppies() {
+    for(let i=0; i<10; i++){
+        setTimeout(()=>{
+            let img = document.createElement("img");
+            img.className = "float-img";
+            img.src = puppyImages[Math.floor(Math.random()*puppyImages.length)];
+            img.style.left = Math.random() * 80 + 10 + "vw"; // Random horizontal pos
+            document.body.appendChild(img);
+            setTimeout(()=>img.remove(), 6000);
+        }, i*300);
+    }
+}
+
+// 2. DRACO MALFOY (UPDATED WITH MORE PHOTOS)
+const dracoImages = [
+    "https://upload.wikimedia.org/wikipedia/en/1/16/Draco_Mal.JPG", // Classic
+    "https://i.pinimg.com/736x/86/e1/e1/86e1e127339d7494488398485085888d.jpg", // Aesthetic
+    "https://upload.wikimedia.org/wikipedia/commons/4/4d/Tom_Felton_2011_San_Diego_Comic_Con_Crop.jpg", // Tom Felton (Actor)
+    "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Tom_Felton_2011.jpg/800px-Tom_Felton_2011.jpg" // Another Tom
+];
+
+function spawnDraco() {
+    for(let i=0; i<5; i++){
+        setTimeout(()=>{
+            let img = document.createElement("img");
+            img.className = "float-img draco-glow";
+            img.src = dracoImages[Math.floor(Math.random()*dracoImages.length)];
+            img.style.left = Math.random() * 80 + 10 + "vw";
+            document.body.appendChild(img);
+            setTimeout(()=>img.remove(), 6000);
+        }, i*500);
+    }
+    // Slytherin text burst
+    setTimeout(()=>{
+        alert("✨ SLITHER IN ✨"); 
+    }, 1000);
+}
+
+// 3. CHOCOLATE MELT
+function meltChocolate() {
+    const overlay = document.getElementById("chocolate-overlay");
+    overlay.classList.add("chocolate-active");
+    
+    // Remove it after 4 seconds so she can see again
+    setTimeout(() => {
+        overlay.classList.remove("chocolate-active");
+    }, 4000);
+}
+
+// 4. MASSIVE HEART STORM
+function massiveHeartStorm() {
+    let count = 0;
+    let storm = setInterval(() => {
+        let x = Math.random() * window.innerWidth;
+        let y = Math.random() * window.innerHeight + window.scrollY;
+        createBurst(x, y);
+        count++;
+        if(count > 30) clearInterval(storm);
+    }, 100);
+}
+
+// 5. FINAL BUTTON EXPLOSION
+function finalExplosion(e) {
+    e.stopPropagation();
+    let centerX = window.innerWidth / 2;
+    let centerY = window.scrollY + (window.innerHeight / 2);
+
+    for(let i=0; i<150; i++){
+        let b = document.createElement("div");
+        b.className = "burst";
+        b.innerHTML = "🤍";
+        b.style.left = centerX + "px";
+        b.style.top = centerY + "px";
+        b.style.setProperty("--x", (Math.random()*1000-500)+"px");
+        b.style.setProperty("--y", (Math.random()*1000-500)+"px");
+        document.body.appendChild(b);
+        setTimeout(()=>b.remove(), 2000);
+    }
+}
+
+/* ---------- HIDDEN MESSAGE ---------- */
+function revealSecret() {
+    document.getElementById('secret-modal').style.display = 'flex';
+}
+
+/* ---------- PARTICLE NAME EFFECT (CANVAS) ---------- */
+const canvas = document.getElementById("textCanvas");
+const ctx = canvas.getContext("2d");
+let particles = [];
+let targetText = "Rithvika";
+
+function resizeCanvas() {
+    canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth;
+    canvas.height = 300;
+}
+resizeCanvas();
+
+class Particle {
+    constructor(x, y) {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.destX = x;
+        this.destY = y;
+        this.size = Math.random() * 3 + 1;
+        this.vx = (Math.random() - 0.5) * 10;
+        this.vy = (Math.random() - 0.5) * 10;
+        this.accX = 0;
+        this.accY = 0;
+        this.friction = Math.random() * 0.05 + 0.92;
+        this.color = "#ffb3d9";
+    }
+
+    update() {
+        this.accX = (this.destX - this.x) / 30;
+        this.accY = (this.destY - this.y) / 30;
+        this.vx += this.accX;
+        this.vy += this.accY;
+        this.vx *= this.friction;
+        this.vy *= this.friction;
+        this.x += this.vx;
+        this.y += this.vy;
+    }
+
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function initParticles() {
+    particles = [];
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.font = "bold 100px Georgia";
+    if(window.innerWidth < 600) ctx.font = "bold 60px Georgia";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(targetText, canvas.width/2, canvas.height/2);
+
+    const idata = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = idata.data;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    for (let y = 0; y < canvas.height; y += 4) {
+        for (let x = 0; x < canvas.width; x += 4) {
+            let index = (y * canvas.width + x) * 4;
+            if (data[index + 3] > 128) {
+                particles.push(new Particle(x, y));
+            }
+        }
+    }
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+        p.update();
+        p.draw();
+    }
+    requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener("resize", () => {
+    resizeCanvas();
+    initParticles();
+});
+initParticles();
+animateParticles();
+
+</script>
+
+</body>
+</html>
